@@ -16,14 +16,15 @@ class TSVWriterPipeline(object):
 		self.file = open('output.csv', 'w', newline='')
 		self.writer = csv.writer(self.file,
 								quotechar='\'',dialect='excel-tab')
+
 		self.writer.writerow(["MPC",
 			"RTCPC",
 			"Brand",
 			"Product URL",
 			"Zipcode",
 			"Quantity",
-			"ListPrice",
 			"RawPrice",
+			"ListPrice",
 			"Shipping",
 			"Discount",
 			"AddtoCart"])
@@ -60,4 +61,5 @@ class TSVWriterPipeline(object):
 			item["discount"],
 			item["addtocart"]
 		])
+		self.file.flush()
 		return item
