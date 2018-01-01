@@ -30,7 +30,6 @@ class TirespiderSpider(scrapy.Spider):
   
 
 	def parse(self, response): 
-
 		qty = response.selector.xpath('//*[@class="qty left"]/.//*[@selected]/text()').extract()
 		if qty:
 			#list price was found on the page. Continue parsing and making request for get the shipping cost
@@ -75,7 +74,6 @@ class TirespiderSpider(scrapy.Spider):
 		o = urlparse(response.meta['product_url'])
 		query = parse_qs(o.query)
 		nexturl = 'https://www.tirerack.com/cart/AddItemServlet?newDesktop=true&shipquote=Y&common=true&Make='+query['tireMake'][0]+'&Model='+query['tireModel'][0]+'&Type=T&i1_PartNumber='+query['partnum'][0]+'&i1_Price='+response.meta['listprice']+'&AddToUser=true&i1_Qty='+response.meta['qty'][0]
-
 		self.logger.info("got response for CartDetails. Executing %s",nexturl)
 		return scrapy.Request(
 				url=nexturl,
@@ -86,8 +84,6 @@ class TirespiderSpider(scrapy.Spider):
 			)
 
 	def parse_addItemServlet(self, response):
-		#we got cookies for cart tracking
-		#now we need to set ZIP code and fetch shipping cost
 		nexturl = 'https://www.tirerack.com/shippingquote/SetZip.jsp?zip='+response.meta["zipcode"]
 		self.logger.info("got response for CartDetails. Executing %s",nexturl)
 		return scrapy.Request(
@@ -130,6 +126,7 @@ class TirespiderSpider(scrapy.Spider):
 						callback = self.parse_GetFreight
 					)
 
+
 	def parse_GetFreight(self, response):
 		#open_in_browser(response)
 		self.logger.info("Shipping info recieved")
@@ -146,6 +143,3 @@ class TirespiderSpider(scrapy.Spider):
 		item["addtocart"] = response.meta["only_cart"] 
 		item["discount"] = response.meta["discount"] 
 		return item
-
-
-

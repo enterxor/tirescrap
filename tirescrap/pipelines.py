@@ -13,7 +13,7 @@ class TirescrapPipeline(object):
 class TSVWriterPipeline(object):
 
 	def open_spider(self, spider):
-		self.file = open('output.csv', 'w', newline='')
+		self.file = open('output.tsv', 'w', newline='')
 		self.writer = csv.writer(self.file,
 								quotechar='\'',dialect='excel-tab')
 
